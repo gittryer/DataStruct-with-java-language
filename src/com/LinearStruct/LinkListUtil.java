@@ -1,7 +1,5 @@
 package com.LinearStruct;
 
-import java.util.Comparator;
-
 public class LinkListUtil
 {
     /**
@@ -54,39 +52,57 @@ public class LinkListUtil
      * @param <T> 数据类型
      * @return 返回逆置后的头节点
      */
-    public static<T> Node<T> Reverse(Node<T> head)
+    public static<T> void Reverse(LinkList<T> ls)
     {
-        var first=head.next;
-        Node<T> reverse=null;
+        var first=ls.getHead().next;
+        Node<T> newHead=null;
+        Node<T> temp=null;
         while (first!=null)
         {
-            var second=first.next;
-            first.next=reverse;
-            reverse=first;
-            first=second;
+            temp=first.next;
+            first.next=newHead;
+            newHead=first;
+            first=temp;
         }
-        head.next=reverse;
-        return head;
-    }
-    /**
-     * 单链表逆置-递归
-     * @param head 头节点
-     * @param <T> 数据类型
-     * @return 返回逆置后的头节点
-     */
-    public static <T> Node<T> Reverse_Recursive(Node<T> head)
-    {
-        var reverse=Reverse_(head.next,null);
-        head.next=reverse;
-        return reverse;
+        ls.getHead().next=newHead;
     }
 
-    public static <T> Node<T> Reverse_(Node<T> first,Node<T> reverse)
+    public static<T> void Reverse_Recursive(LinkList<T> ls)
+    {
+        ls.getHead().next=reverse_(ls.getHead().next);
+    }
+    /**
+     * 反转链表递归
+     * @param first 头节点
+     */
+    private static<T> Node<T> reverse_(Node<T> first)
     {
         if(first==null)
-            return reverse;
-        var second=first.next;
-        first.next=reverse;
-        return Reverse_(second,first);
+            return null;
+        if(first.next==null)
+            return first;
+        //假设前n-1个已经反转
+        Node<T> newHead=reverse_(first.next);
+        first.next.next=first;
+        first.next=null;
+        return newHead;
+    }
+
+    /**
+     * 获取链表中间节点
+     * @param ls 链表
+     * @param <T> 数据类型
+     * @return 返回中间节点
+     */
+    public static<T> Node<T> getMid(LinkList<T> ls)
+    {
+        var p=ls.getHead();
+        var q=p;
+        while (q!=null&&q.next!=null)
+        {
+            p=p.next;
+            q=q.next.next;
+        }
+        return p.next;
     }
 }

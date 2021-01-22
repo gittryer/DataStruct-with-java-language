@@ -1,25 +1,22 @@
 import com.BTree.BTree;
+import com.LinearStruct.ArrayList;
+import com.LinearStruct.IList;
+import com.LinearStruct.LinkList;
+import com.LinearStruct.LinkListUtil;
 import com.Queue.PriorityQueue;
 import com.Queue.RandomQueue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        RandomQueue<Integer>
-                rq= new RandomQueue<Integer>();
-        for (int i = 0; i < 10; i++)
+        LinkList<Integer> ls=new LinkList<>();
+        for (int i = 1; i < 5; i++)
         {
-            rq.enter(i);
+            ls.add(i);
         }
-        while (!rq.isEmpty())
-        {
-            System.out.println(rq.out());
-        }
-    };
+        var p=LinkListUtil.getMid(ls);
+        System.out.println(p.data);
 
+    }
 }

@@ -104,6 +104,25 @@ public class LinkList<T> implements IList<T>
     }
 
     /**
+     * 删除指定节点
+     * @param p 给定节点
+     */
+    public void remove(Node p)
+    {
+        if(p.next==null)
+        {
+            p=null;
+            this.count--;
+        }
+        else
+        {
+            var t=p.next;
+            p.data=t.data;
+            p.next=t.next;
+            this.count--;
+        }
+    }
+    /**
      * 删除所有与val相同的元素
      * @param val 要删除的元素值
      * @return 返回删除的元素个数

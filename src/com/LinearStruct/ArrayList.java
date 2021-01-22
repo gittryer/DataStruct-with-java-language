@@ -1,5 +1,4 @@
 package com.LinearStruct;
-
 import java.util.Iterator;
 
 /**
@@ -189,11 +188,11 @@ public class ArrayList<T> implements IList<T>
         if(index<0||index>=count)
             throw new IndexOutOfBoundsException("越界于Index:"+index+",Count:"+count);
         var val=this.data[index];
-        for (int i=index;i<count;++i)
+        for (int i=index;i<count-1;++i)
         {
             this.data[i]=this.data[i+1];
         }
-        this.count--;
+        this.data[--this.count]=null;
         return val;
     }
 
