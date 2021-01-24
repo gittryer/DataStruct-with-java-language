@@ -1,12 +1,10 @@
 package com.Queue;
 
-import java.util.Iterator;
-
 /**
  * 顺序队列
  * @param <T> 数据类型
  */
-public class SeqQueue<T> implements IQueue<T>,Iterable<T>
+public class SeqQueue<T> implements IQueue<T>
 {
     /**
      * 默认队列容量
@@ -66,10 +64,27 @@ public class SeqQueue<T> implements IQueue<T>,Iterable<T>
     @Override
     public void enter(T val)
     {
-        if(isFull())
-            throw new IndexOutOfBoundsException("队满！");
+        expand();
         this.data[this.rear]=val;
         this.rear=(this.rear+1)%this.data.length;
+    }
+
+    /**
+     * 扩容
+     */
+    private void expand()
+    {
+        if(isFull())
+        {
+            T[]data=(T[])new Object[this.data.length<<1];
+            for (int i = 0; i < this.data.length; i++)
+            {
+                data[i]=this.data[(this.front+i)%this.data.length];
+            }
+            this.front=0;
+            this.rear=this.data.length-1;
+            this.data=data;
+        }
     }
 
     @Override
@@ -115,32 +130,32 @@ public class SeqQueue<T> implements IQueue<T>,Iterable<T>
     }
 
 
-    public Iterator<T> iterator()
-    {
-        return new SeqQueueIterator();
-    }
-
-    private class SeqQueueIterator implements Iterator<T>
-    {
-        private int index;
-
-        public SeqQueueIterator()
-        {
-            this.index=front;
-        }
-
-        @Override
-        public boolean hasNext()
-        {
-            return this.index!=rear;
-        }
-
-        @Override
-        public T next()
-        {
-            var val=data[index];
-            index=(index+1)%data.length;
-            return val;
-        }
-    }
+//    public Iterator<T> iterator()
+//    {
+//        return new SeqQueueIterator();
+//    }
+//
+//    private class SeqQueueIterator implements Iterator<T>
+//    {
+//        private int index;
+//
+//        public SeqQueueIterator()
+//        {
+//            this.index=front;
+//        }
+//
+//        @Override
+//        public boolean hasNext()
+//        {
+//            return this.index!=rear;
+//        }
+//
+//        @Override
+//        public T next()
+//        {
+//            var val=data[index];
+//            index=(index+1)%data.length;
+//            return val;
+//        }
+//    }
 }

@@ -1,6 +1,5 @@
 package com.Queue;
 
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -126,37 +125,37 @@ public class RandomQueue<T> implements IQueue<T>
     }
 
 
-    public Iterator<T> iterator()
-    {
-        return new RandomQueueIterator();
-    }
-
-    private class RandomQueueIterator implements Iterator<T>
-    {
-        //打乱的索引表
-        private int[]indexes;
-        //当前索引
-        private int index;
-        /**
-         * 构造函数
-         */
-        public RandomQueueIterator()
-        {
-            this.indexes=new int[count];
-            for (int i = 0; i < count; i++)
-                indexes[i]=i;
-            shuffle(this.indexes);
-        }
-        @Override
-        public boolean hasNext()
-        {
-            return index<indexes.length;
-        }
-
-        @Override
-        public T next()
-        {
-            return data[this.indexes[this.index++]];
-        }
-    }
+//    public Iterator<T> iterator()
+//    {
+//        return new RandomQueueIterator();
+//    }
+//
+//    private class RandomQueueIterator implements Iterator<T>
+//    {
+//        //打乱的索引表
+//        private int[]indexes;
+//        //当前索引
+//        private int index;
+//        /**
+//         * 构造函数
+//         */
+//        public RandomQueueIterator()
+//        {
+//            this.indexes=new int[count];
+//            for (int i = 0; i < count; i++)
+//                indexes[i]=i;
+//            shuffle(this.indexes);
+//        }
+//        @Override
+//        public boolean hasNext()
+//        {
+//            return index<indexes.length;
+//        }
+//
+//        @Override
+//        public T next()
+//        {
+//            return data[this.indexes[this.index++]];
+//        }
+//    }
 }

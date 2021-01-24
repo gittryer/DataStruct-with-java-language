@@ -12,8 +12,6 @@ public class SeqDeque<T> implements IDeque<T>
     private int rear;
     //默认元素个数
     private final int DEFAULT_SIZE=100;
-    //数据元素个数
-    private int count;
     //数据域
     private T []data;
     /**
@@ -21,8 +19,15 @@ public class SeqDeque<T> implements IDeque<T>
      */
     public SeqDeque()
     {
-        this.count=0;
         this.data=(T[])new Object[DEFAULT_SIZE];
+    }
+    /**
+     * 构造函数
+     * @param size 容量大小
+     */
+    public SeqDeque(int size)
+    {
+        this.data=(T[])new Object[size];
     }
 
     /**
@@ -48,8 +53,7 @@ public class SeqDeque<T> implements IDeque<T>
     @Override
     public void pushLeft(T val)
     {
-        if(isFull())
-            throw new IndexOutOfBoundsException("队列满！");
+        expand();
         this.front=(this.front-1+this.data.length)%this.data.length;
         this.data[this.front]=val;
     }
@@ -57,10 +61,9 @@ public class SeqDeque<T> implements IDeque<T>
     @Override
     public void pushRight(T val)
     {
-        if(isFull())
-            throw new IndexOutOfBoundsException("队列满！");
+        expand();
         this.data[this.rear]=val;
-        this.rear=(this.rear+1+this.data.length)%this.data.length;
+        this.rear=(this.rear+1)%this.data.length;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class SeqDeque<T> implements IDeque<T>
         if(isEmpty())
             throw new IndexOutOfBoundsException("队列空！");
         var val=this.data[this.front];
-        this.front=(this.front-1+this.data.length)%this.data.length;
+        this.front=(this.front+1)%this.data.length;
         return val;
     }
 
@@ -78,8 +81,26 @@ public class SeqDeque<T> implements IDeque<T>
     {
         if(isEmpty())
             throw new IndexOutOfBoundsException("队列空！");
+        this.rear=(this.rear-1+this.data.length)%this.data.length;
         var val=this.data[this.rear];
-        this.rear=(this.rear+1+this.data.length)%this.data.length;
         return val;
+    }
+
+    /**
+     * 扩容
+     */
+    private void expand()
+    {
+        if(this.getCount()+1==this.data.length)
+        {
+            T[]data=(T[])new Object[this.data.length<<1];
+            for (int i = 0; i < this.getCount(); i++)
+            {
+                data[i]=this.data[(i+this.front)%this.data.length];
+            }
+            this.front=0;
+            this.rear=this.data.length-1;
+            this.data=data;
+        }
     }
 }

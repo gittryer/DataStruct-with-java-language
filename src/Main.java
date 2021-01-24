@@ -1,22 +1,21 @@
 import com.BTree.BTree;
-import com.LinearStruct.ArrayList;
-import com.LinearStruct.IList;
-import com.LinearStruct.LinkList;
-import com.LinearStruct.LinkListUtil;
-import com.Queue.PriorityQueue;
-import com.Queue.RandomQueue;
+import com.LinearStruct.*;
+import com.Queue.*;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        LinkList<Integer> ls=new LinkList<>();
-        for (int i = 1; i < 5; i++)
+        var sq=new SeqDeque<Integer>(3);
+        for (int i = 0; i < 50; i++)
         {
-            ls.add(i);
+            sq.pushLeft(i);
         }
-        var p=LinkListUtil.getMid(ls);
-        System.out.println(p.data);
+        System.out.println(sq.getCount());
+        while (!sq.isEmpty())
+        {
+            System.out.println(sq.popRight());
+        }
 
     }
 }

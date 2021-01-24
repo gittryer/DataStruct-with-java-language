@@ -1,13 +1,11 @@
 package com.Queue;
 import com.LinearStruct.Node;
 
-import java.util.Iterator;
-
 /**
  * 队列-循环链表
  * @param <T> 数据类型
  */
-public class LinkQueue<T> implements IQueue<T>,Iterable<T>
+public class LinkQueue<T> implements IQueue<T>
 {
     //尾节点
     private Node<T> last;
@@ -104,34 +102,34 @@ public class LinkQueue<T> implements IQueue<T>,Iterable<T>
         this.count--;
         return val;
     }
-
-    public Iterator<T> iterator()
-    {
-        return new LinkQueueIterator();
-    }
-    private class LinkQueueIterator implements Iterator<T>
-    {
-        private Node<T> p;
-        boolean flg;
-        public LinkQueueIterator()
-        {
-            this.p=last.next;
-            this.flg=true;
-        }
-
-        @Override
-        public boolean hasNext()
-        {
-            return p!=null&&flg||p!=last.next;
-        }
-
-        @Override
-        public T next()
-        {
-            flg=false;
-            var val=p.data;
-            p=p.next;
-            return val;
-        }
-    }
+//
+//    public Iterator<T> iterator()
+//    {
+//        return new LinkQueueIterator();
+//    }
+//    private class LinkQueueIterator implements Iterator<T>
+//    {
+//        private Node<T> p;
+//        boolean flg;
+//        public LinkQueueIterator()
+//        {
+//            this.p=last.next;
+//            this.flg=true;
+//        }
+//
+//        @Override
+//        public boolean hasNext()
+//        {
+//            return p!=null&&flg||p!=last.next;
+//        }
+//
+//        @Override
+//        public T next()
+//        {
+//            flg=false;
+//            var val=p.data;
+//            p=p.next;
+//            return val;
+//        }
+//    }
 }
