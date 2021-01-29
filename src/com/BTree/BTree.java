@@ -47,6 +47,10 @@ class Node<T>
     }
 }
 
+/**
+ * 二叉搜索树
+ * @param <T> 数据类型
+ */
 public class BTree<T>
 {
     /**
@@ -81,6 +85,29 @@ public class BTree<T>
     }
 
     /**
+     * 构造函数
+     * @param data 数据
+     */
+    public BTree(T[]data)
+    {
+        this(data,null);
+    }
+
+    /**
+     * 构造函数
+     * @param data 数据
+     * @param comparator 比较器
+     */
+    public BTree(T[]data,Comparator<T> comparator)
+    {
+        for (int i = 0; i < data.length; i++)
+        {
+            this.add(data[i]);
+        }
+        this.comparator=comparator;
+    }
+
+    /**
      * 比较x和y的大小
      * @param x 第一个元素
      * @param y 第二个元素
@@ -90,7 +117,7 @@ public class BTree<T>
     {
         return this.comparator==null?((Comparable<T>)x).compareTo(y):
                 this.comparator.compare(x,y);
-    }
+}
 
     /**
      * 添加元素
@@ -122,7 +149,39 @@ public class BTree<T>
 
     public void DLR()
     {
+        DLR_(this.root);
+    }
 
+    public void LDR()
+    {
+        LDR_(this.root);
+    }
+
+    /**
+     * 层序遍历
+     */
+    public int level()
+    {
+       int level=0;
+       IQueue<Node<T>> q=new LinkQueue<>();
+       q.enter(this.root);
+       while (!q.isEmpty())
+       {
+
+           level++;
+           int cnt=q.getCount();
+           for (int i = 0; i < cnt; i++)
+           {
+               var temp=q.out();
+               System.out.print(temp.data+" ");
+               if (temp.left!=null)
+                   q.enter(temp.left);
+               if(temp.right!=null)
+                   q.enter(temp.right);
+           }
+           System.out.println();
+       }
+       return level;
     }
 
     /**
@@ -192,6 +251,15 @@ public class BTree<T>
             return contains(p.right,val);
     }
 
+    /**
+     * 删除元素
+     * @param val 元素值
+     * @return 返回
+     */
+    public Node remove(T val)
+    {
+        return null;
+    }
     /**
      * 是否为空
      * @return 返回元素个数是否为空

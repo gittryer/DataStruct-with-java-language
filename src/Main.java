@@ -2,20 +2,14 @@ import com.BTree.BTree;
 import com.LinearStruct.*;
 import com.Queue.*;
 
+import java.util.Comparator;
+
 public class Main
 {
     public static void main(String[] args)
     {
-        var sq=new SeqDeque<Integer>(3);
-        for (int i = 0; i < 50; i++)
-        {
-            sq.pushLeft(i);
-        }
-        System.out.println(sq.getCount());
-        while (!sq.isEmpty())
-        {
-            System.out.println(sq.popRight());
-        }
-
+        var ls=new Integer[]{3,2,1,4,5};
+        var bs=new BTree<Integer>(ls);
+        bs.LDR();
     }
 }

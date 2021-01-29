@@ -1,5 +1,9 @@
 package com.BTree;
 
+/**
+ * 哈夫曼节点
+ * @param <T> 数据类型
+ */
 public class HuffmanNode<T>
 {
     //数据域

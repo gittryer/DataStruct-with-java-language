@@ -1,7 +1,6 @@
 package com.BTree;
 import java.util.Comparator;
 
-//videojs.getPlayers("video-player").html5player.tech_.setPlaybackRate(2)
 /**
  * 二叉树的顺序存储结构：二叉堆
  */
