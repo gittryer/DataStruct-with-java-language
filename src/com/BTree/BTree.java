@@ -1,51 +1,11 @@
 package com.BTree;
 import com.Queue.IQueue;
 import com.Queue.LinkQueue;
+import com.Stack.IStack;
+import com.Stack.LinkStack;
 
 import java.util.Comparator;
 //videojs.getPlayers("video-player").html5player.tech_.setPlaybackRate(2)
-
-/**
- * 二叉树节点
- * @param <T> 数据类型
- */
-class Node<T>
-{
-    /**
-     * 数据域
-     */
-    public T data;
-    /**
-     * 左孩子索引
-     */
-    public Node<T> left;
-    /**
-     * 右孩子索引
-     */
-    public Node<T> right;
-
-    /**
-     * 构造函数
-     * @param data 数据域
-     * @param left 左索引
-     * @param right 右索引
-     */
-    public Node(T data,Node<T> left,Node<T> right)
-    {
-        this.data=data;
-        this.left=left;
-        this.right=right;
-    }
-
-    /**
-     * 构造函数
-     * @param data 数据域
-     */
-    public Node(T data)
-    {
-        this.data=data;
-    }
-}
 
 /**
  * 二叉搜索树
@@ -83,7 +43,6 @@ public class BTree<T>
         this.comparator=comparator;
         this.count=0;
     }
-
     /**
      * 构造函数
      * @param data 数据
@@ -108,6 +67,54 @@ public class BTree<T>
     }
 
     /**
+     * 获取二叉树最大值
+     * @return 返回最大值
+     */
+    public T getMax()
+    {
+        if(isEmpty())
+            throw new IndexOutOfBoundsException("二叉树为空!");
+        return getMax(this.root).data;
+    }
+
+    /**
+     * 获取二叉树最小值
+     * @return 返回最小值
+     */
+    public T getMin()
+    {
+        if(isEmpty())
+            throw new IndexOutOfBoundsException("二叉树为空!");
+        return getMin(this.root).data;
+    }
+    /**
+     *  获取根为某个节点的子树的最大值节点
+     * @param p 根节点
+     * @return 最大值节点
+     */
+    private Node<T> getMax(Node p)
+    {
+        if(p==null)
+            return null;
+        while (p.right!=null)
+            p=p.right;
+        return p;
+    }
+    /**
+     *  获取根为某个节点的子树的最小值节点
+     * @param p 根节点
+     * @return 最小值节点
+     */
+    private Node<T> getMin(Node p)
+    {
+        if(p==null)
+            return null;
+        while (p.left!=null)
+            p=p.left;
+        return p;
+    }
+
+    /**
      * 比较x和y的大小
      * @param x 第一个元素
      * @param y 第二个元素
@@ -117,7 +124,7 @@ public class BTree<T>
     {
         return this.comparator==null?((Comparable<T>)x).compareTo(y):
                 this.comparator.compare(x,y);
-}
+    }
 
     /**
      * 添加元素
@@ -127,7 +134,6 @@ public class BTree<T>
     {
         this.root=add(this.root,val);
     }
-
     /**
      * 递归添加元素
      * @param p 节点
@@ -147,14 +153,117 @@ public class BTree<T>
         return p;
     }
 
-    public void DLR()
+    /**
+     * 删除元素
+     * @param val 元素值
+     */
+    public void remove(T val)
     {
-        DLR_(this.root);
+        this.remove(this.root,val);
     }
 
+    /**
+     * 删除元素
+     * @param p 节点
+     * @param val 删除的元素值
+     */
+    private Node<T> remove(Node<T> p,T val)// 删除节点
+    {
+        if (p == null)
+            return null;
+        else if (this.compare(val,p.data)<0)
+            p.left = remove( p.left,val);
+        else if (this.compare(val,p.data)>0)
+            p.right = remove(p.right,val);
+        else
+        {
+            if (p.left == null && p.right == null)
+                p = null;
+            else if (p.left != null && p.right != null)
+            {
+                p.data = getMin(p.right).data;// 找到右侧最小值替代
+                p.right = remove(p.right,p.data);
+            }
+            else if (p.right != null)
+                p = p.right;
+            else
+                p = p.left;
+        }
+        return p;
+    }
+
+    /**
+     * 前序遍历-非递归
+     */
+    public void DLR()
+    {
+        IStack<Node<T>> sk=new LinkStack<>();
+        var p=this.root;
+        while (!sk.isEmpty()||p!=null)
+        {
+            if (p!=null)
+            {
+                System.out.println(p.data);
+                sk.push(p);
+                p=p.left;
+            }
+            else
+            {
+                var temp=sk.pop();
+                p=temp.right;
+            }
+        }
+    }
+
+    /**
+     * 中序遍历-非递归
+     */
     public void LDR()
     {
-        LDR_(this.root);
+        IStack<Node<T>> sk=new LinkStack<>();
+        var p=this.root;
+        while (!sk.isEmpty()||p!=null)
+        {
+            if (p!=null)
+            {
+                sk.push(p);
+                p=p.left;
+            }
+            else
+            {
+                var temp=sk.pop();
+                System.out.println(temp.data);
+                p=temp.right;
+            }
+        }
+    }
+
+    /**
+     * 后续遍历-非递归
+     */
+    public void LRD()
+    {
+        IStack<Node<T>> sk1=new LinkStack<>();
+        IStack<Node<T>> sk2=new LinkStack<>();
+        var p=this.root;
+        while (!sk1.isEmpty()||p!=null)
+        {
+            if (p != null)
+            {
+                sk1.push(p);
+                sk2.push(p);
+                p=p.right;
+            }
+            else
+            {
+                var temp=sk1.pop();
+                p=temp.left;
+            }
+        }
+        while (!sk2.isEmpty())
+        {
+            System.out.println(sk2.pop().data);
+        }
     }
 
     /**
@@ -252,12 +361,22 @@ public class BTree<T>
     }
 
     /**
-     * 删除元素
-     * @param val 元素值
-     * @return 返回
+     * 查找某个节点
+     * @param val 元素在
+     * @return 返回节点
      */
-    public Node remove(T val)
+    public Node<T> get(T val)
     {
+        var p=this.root;
+        while (p!=null)
+        {
+            if(this.compare(p.data,val)<0)
+                p=p.left;
+            else if(this.compare(p.data,val)>0)
+                p=p.left;
+            else
+                return p;
+        }
         return null;
     }
     /**

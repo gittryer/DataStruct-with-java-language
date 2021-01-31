@@ -10,6 +10,6 @@ public class Main
     {
         var ls=new Integer[]{3,2,1,4,5};
         var bs=new BTree<Integer>(ls);
-        bs.LDR();
+        bs.LRD();
     }
 }
