@@ -96,7 +96,8 @@ public class HuffmanTree<T>
                 return;
             }
             var y=hHeap.remove();
-            var t=new HuffmanNode<HuffmanData<T>>(new HuffmanData<T>(null,x.data.weight+y.data.weight),x,y);
+            var t=new HuffmanNode<HuffmanData<T>>
+                    (new HuffmanData<T>(null,x.data.weight+y.data.weight),x,y);
             hHeap.add(t);
         }
     }

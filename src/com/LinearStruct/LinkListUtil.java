@@ -105,4 +105,35 @@ public class LinkListUtil
         }
         return p.next;
     }
+
+    /**
+     * 链表归并
+     * @param h1 第一个链表节点
+     * @param h2 第二个链表节点
+     * @return 返回归并结果
+     */
+    public static  Node<Integer> merge(Node<Integer> h1,Node<Integer> h2)
+    {
+        var p=h1.next;
+        var q=h2.next;
+        Node<Integer> t=new Node<>();
+        var head=t;
+        while (p!=null&&q!=null)
+        {
+            if(p.data.compareTo(q.data)<0)
+            {
+                t.next=p;
+                p=p.next;
+                t=t.next;
+            }
+            else
+            {
+                t.next=q;
+                q=q.next;
+                t=t.next;
+            }
+        }
+        t.next=(p==null?q:p);
+        return head;
+    }
 }
