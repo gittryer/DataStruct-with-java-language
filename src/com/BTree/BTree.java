@@ -276,7 +276,6 @@ public class BTree<T>
        q.enter(this.root);
        while (!q.isEmpty())
        {
-
            level++;
            int cnt=q.getCount();
            for (int i = 0; i < cnt; i++)
@@ -360,6 +359,35 @@ public class BTree<T>
             return contains(p.right,val);
     }
 
+    /**
+     * 判断是否为完全二叉树
+     * @return 返回是否为完全二叉树
+     */
+    public boolean isComplete()
+    {
+        if(root==null)
+            return false;
+        IQueue<Node<T>> q=new LinkQueue<>();
+        q.enter(this.root);
+        //开始遍历叶子节点
+        var startLeaf=false;
+        while (!q.isEmpty())
+        {
+            var node=q.out();
+            if(node.degree()==2)
+            {
+                q.enter(node.left);
+                q.enter(node.right);
+            }
+            else if(startLeaf&&!node.isLeaf())
+                return false;
+            else if(node.left==null&&node.right!=null)
+                return false;
+            else
+                startLeaf=true;
+        }
+        return false;
+    }
     /**
      * 查找某个节点
      * @param val 元素在

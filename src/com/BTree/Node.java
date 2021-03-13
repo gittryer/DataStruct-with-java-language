@@ -39,4 +39,27 @@ public class Node<T>
     {
         this.data=data;
     }
+
+    /**
+     * 判断当前节点是否为叶子节点
+     * @return 返回是否为叶子节点
+     */
+    public boolean isLeaf()
+    {
+        return this.left==null&&this.right==null;
+    }
+
+    /**
+     * 返回当前节点的度
+     * @return 返回度
+     */
+    public int degree()
+    {
+        if(isLeaf())
+            return 0;
+        else if(this.left!=null&&this.right!=null)
+            return 2;
+        else
+            return 1;
+    }
 }
