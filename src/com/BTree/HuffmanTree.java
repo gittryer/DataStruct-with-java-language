@@ -1,29 +1,14 @@
 package com.BTree;
+import com.LinearStruct.ArrayList;
+import com.LinearStruct.IList;
+import com.LinearStruct.LinkList;
+import com.Queue.IQueue;
 import com.Queue.LinkQueue;
+import com.Queue.PriorityQueue;
+
 import java.util.Comparator;
-
-/**
- * 哈夫曼数据
- * @param <T> 节点数据类型
- */
-class HuffmanData<T>
-{
-    //数据域
-    public T name;
-    //权重
-    public double weight;
-
-    /**
-     * 构造函数
-     * @param data 数据域
-     * @param weight 权重
-     */
-    public HuffmanData(T data,double weight)
-    {
-        this.name =data;
-        this.weight=weight;
-    }
-}
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 哈夫曼树
@@ -32,100 +17,123 @@ class HuffmanData<T>
 public class HuffmanTree<T>
 {
     //堆
-    private BHeap<HuffmanNode<HuffmanData<T>>> hHeap;
+    private PriorityQueue<HuffmanNode<T>> queue;
     //根节点
-    private HuffmanNode<HuffmanData<T>> root;
+    private HuffmanNode<T> root;
 
     /**
      * 哈夫曼树
-     * @param data 哈夫曼数据数组
-     */
-    public HuffmanTree(HuffmanData<T>[]data)
-    {
-        //初始化堆
-        hHeap=new BHeap<HuffmanNode<HuffmanData<T>>>(new Comparator<HuffmanNode<HuffmanData<T>>>()
-        {
-            @Override
-            public int compare(HuffmanNode<HuffmanData<T>> o1, HuffmanNode<HuffmanData<T>> o2)
-            {
-                return Double.compare(o2.data.weight,o1.data.weight);
-            }
-        });
-        //构建堆
-        for (int i = 0; i < data.length; i++)
-            hHeap.add(new HuffmanNode<HuffmanData<T>>(data[i]));
-        //构建哈夫曼树
-        while (!hHeap.isEmpty())
-        {
-            var x=hHeap.remove();
-            if(hHeap.isEmpty())
-            {
-                this.root=x;
-                return;
-            }
-            var y=hHeap.remove();
-            var t=new HuffmanNode<HuffmanData<T>>(new HuffmanData<T>(null,
-                    x.data.weight+y.data.weight),x,y);
-            hHeap.add(t);
-        }
-    }
-
-    /**
-     * 哈夫曼树
-     * @param data 标识数组
+     *
+     * @param data   标识数组
      * @param weight 权重数组
      */
-    public HuffmanTree(T[]data,double[]weight)
+    public HuffmanTree(T[] name, double[] weight)
     {
-        hHeap=new BHeap<HuffmanNode<HuffmanData<T>>>(new Comparator<HuffmanNode<HuffmanData<T>>>()
+        this.queue = new PriorityQueue<>(new Comparator<HuffmanNode<T>>()
         {
             @Override
-            public int compare(HuffmanNode<HuffmanData<T>> o1, HuffmanNode<HuffmanData<T>> o2)
+            public int compare(HuffmanNode<T> o1, HuffmanNode<T> o2)
             {
-                return Double.compare(o2.data.weight,o1.data.weight);
+                return Double.compare(o2.weight, o1.weight);
             }
         });
-        for (int i = 0; i < data.length; i++)
-            hHeap.add(new HuffmanNode<HuffmanData<T>>(new HuffmanData<T>(data[i],weight[i])));
-        while (!hHeap.isEmpty())
+        for (int i = 0; i < name.length; i++)
+            this.queue.enter(new HuffmanNode<T>(name[i], weight[i]));
+        while (!queue.isEmpty())
         {
-            var x=hHeap.remove();
-            if(hHeap.isEmpty())
+            var x = queue.out();
+            if (queue.isEmpty())
             {
-                this.root=x;
+                this.root = x;
                 return;
             }
-            var y=hHeap.remove();
-            var t=new HuffmanNode<HuffmanData<T>>
-                    (new HuffmanData<T>(null,x.data.weight+y.data.weight),x,y);
-            hHeap.add(t);
+            var y = queue.out();
+            var t = new HuffmanNode<T>(null, x.weight + y.weight, x, y);
+            queue.enter(t);
         }
     }
+
     /**
      * 获取带权路径长度
+     *
      * @return 获取带权路径长度
      */
     public double getWPL()
     {
-        var q=new LinkQueue<HuffmanNode<HuffmanData<T>>>();
-        double wpl=0;
-        int level=0;
+        var q = new LinkQueue<HuffmanNode<T>>();
+        double wpl = 0;
+        int level = 0;
         q.enter(this.root);
         while (!q.isEmpty())
         {
             level++;
-            int count=q.getCount();
+            int count = q.getCount();
             for (int i = 0; i < count; i++)
             {
-                var t=q.out();
-                if(t.data.name!=null)
-                    wpl+=t.data.weight*(level-1);
-                if(t.left!=null)
+                var t = q.out();
+                if (t.name != null)
+                    wpl += t.weight * (level - 1);
+                if (t.left != null)
                     q.enter(t.left);
-                if(t.right!=null)
+                if (t.right != null)
                     q.enter(t.right);
             }
         }
         return wpl;
+    }
+
+    /**
+     * 获取哈夫曼编码
+     * @return 返回哈夫曼码表
+     */
+    public Map<T,String> getCode()
+    {
+        Map<T,String> mp = new TreeMap<>();
+        IQueue<HuffmanNode<T>> q = new LinkQueue<>();
+        IQueue<String> qStr = new LinkQueue<>();
+        q.enter(root);
+        qStr.enter("");
+        while (!q.isEmpty())
+        {
+            var temp = q.out();
+            String curStr = qStr.out();
+            //叶子节点
+            if (temp.left == null && temp.right == null)
+                mp.put(temp.name,curStr);
+               // ls.add(curStr + temp.name);
+            if (temp.left != null)
+            {
+                q.enter(temp.left);
+                qStr.enter(curStr+"0");
+                //qStr.enter(curStr + temp.name + "->");
+            }
+            if (temp.right != null)
+            {
+                q.enter(temp.right);
+                qStr.enter(curStr+"1");
+                //qStr.enter(curStr + temp.name + "->");
+            }
+        }
+        return mp;
+    }
+
+    public static IList<HuffmanNode<Byte>> getNodes(byte[]data)
+    {
+        IList<HuffmanNode<Byte>>ls=new LinkList<>();
+        Map<Byte,Double> map=new TreeMap<>();
+        for (int i = 0; i < data.length; i++)
+        {
+            var count=map.get(data[i]);
+            if(count==null)
+                map.put(data[i],1.);
+            else
+                map.put(data[i],count+1.);
+        }
+        for(Map.Entry<Byte,Double> item:map.entrySet())
+        {
+            var node=new HuffmanNode<Byte>(item.getKey(),item.getValue());
+            ls.add(node);
+        }
+        return ls;
     }
 }

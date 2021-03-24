@@ -34,10 +34,10 @@ public class DLinkList<T> implements IList<T>
      */
     private DNode<T> getNode(int index)
     {
-        if(index<0||index>this.count)
-            throw new IndexOutOfBoundsException("访问月结！");
+        if(index<-1||index>=this.count)
+            throw new IndexOutOfBoundsException("访问越界！");
         var p=this.head;
-        for (int i = 1; i <= index; i++)
+        for (int i = -1; i < index; i++)
             p=p.next;
         return p;
     }
@@ -59,7 +59,7 @@ public class DLinkList<T> implements IList<T>
     public int indexOf(T val)
     {
         var p=this.head;
-        int i=0;
+        int i=-1;
         while (p.next!=this.tail)
         {
             p=p.next;
@@ -88,8 +88,6 @@ public class DLinkList<T> implements IList<T>
     @Override
     public T remove(int index)
     {
-        if(index<1||index>this.count)
-            throw new IndexOutOfBoundsException("访问越界！");
         var p=this.getNode(index-1);
         var t=p.next;
         var val=t.data;
@@ -102,18 +100,11 @@ public class DLinkList<T> implements IList<T>
     @Override
     public void add(int index, T val)
     {
-        if(index==this.count+1)
-            this.addEnd(val);
-        else if(index<1||index>this.count)
-            throw new IndexOutOfBoundsException("访问越界！");
-        else
-        {
-            var p=this.getNode(index-1);
-            var t=new DNode<T>(val,p,p.next);
-            p.next.prior=t;
-            p.next=t;
-            this.count++;
-        }
+        var p=this.getNode(index-1);
+        var t=new DNode<T>(val,p,p.next);
+        p.next.prior=t;
+        p.next=t;
+        this.count++;
     }
 
     /**

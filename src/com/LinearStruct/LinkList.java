@@ -3,7 +3,7 @@ package com.LinearStruct;
 import java.util.Iterator;
 
 /**
- * 链表 索引从head开始，起始为0
+ * 链表 有头节点，首节点索引0
  * @param <T>
  */
 public class LinkList<T> implements IList<T>
@@ -37,11 +37,11 @@ public class LinkList<T> implements IList<T>
      */
     private Node<T> getNode(int k)
     {
-        //当k=0时为头节点
-        if(k<0||k>this.count)
+        //规定头节点索引为-1，首节点索引为0
+        if(k<-1||k>=this.count)
             throw new IndexOutOfBoundsException("索引越界！");
         var p=this.head;
-        for (int i = 1; i <=k; i++)
+        for (int i = -1; i <k; i++)
             p=p.next;
         return p;
     }
@@ -62,7 +62,7 @@ public class LinkList<T> implements IList<T>
     public int indexOf(T val)
     {
         var p=this.head;
-        int i=0;
+        int i=-1;
         while (p.next!=null)
         {
             p=p.next;
@@ -82,8 +82,6 @@ public class LinkList<T> implements IList<T>
     @Override
     public T set(int index, T val)
     {
-        if(index<1||index>this.count)
-            throw new IndexOutOfBoundsException("索引越界！");
         var p=this.getNode(index);
         var ans=p.data;
         p.data=val;
@@ -93,8 +91,8 @@ public class LinkList<T> implements IList<T>
     @Override
     public T remove(int index)
     {
-        if(index<1||index>this.count)
-            throw new IndexOutOfBoundsException("索引越界！");
+//        if(index<1||index>this.count)
+//            throw new IndexOutOfBoundsException("索引越界！");
         var p=this.getNode(index-1);
         var t=p.next;
         var val=t.data;
@@ -149,23 +147,16 @@ public class LinkList<T> implements IList<T>
     @Override
     public void add(int index, T val)
     {
-        if(index==this.count+1)
-            this.add(val);
-        else if(index<1||index>this.count)
-            throw new IndexOutOfBoundsException("索引越界！");
-        else
-        {
             var p=this.getNode(index-1);
             var t=new  Node<T>(val,p.next);
             p.next=t;
             this.count++;
-        }
     }
 
     @Override
     public void add(T val)
     {
-        var p=this.getNode(this.count);
+        var p=this.getNode(this.count-1);
         var t=new Node<T>(val,p.next);
         p.next=t;
         this.count++;

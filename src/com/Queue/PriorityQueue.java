@@ -13,6 +13,7 @@ public class PriorityQueue<T> implements IQueue<T>
 
     /**
      * 构造函数
+     * 默认为小顶堆，即大优先级先出
      */
     public PriorityQueue()
     {

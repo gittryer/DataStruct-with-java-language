@@ -62,43 +62,6 @@ public  class StackUtil
         return sk.getCount()==0;
     }
 
-    public static  double Eval(String str)
-    {
-        var arr=str.split(" ");
-        var sk1=new LinkStack<String>();
-        var sk2=new LinkStack<Double>();
-        for (int i=0;i<arr.length;++i)
-        {
-            if(arr[i].equals("("));
-            else if(arr[i].equals("+"))
-                sk1.push("+");
-            else if(arr[i].equals("-"))
-                sk1.push("-");
-            else if(arr[i].equals("*"))
-                sk1.push("*");
-            else if(arr[i].equals("/"))
-                sk1.push("/");
-            else if(arr[i].equals("**"))
-                sk1.push("**");
-            else if(arr[i].equals(")"))
-            {
-                var op=sk1.pop();
-                var x=sk2.pop();
-                var y=sk2.pop();
-                if(op.equals("+"))
-                    sk2.push(x+y);
-                else if(op.equals("-"))
-                    sk2.push(x-y);
-                else if(op.equals("*"))
-                    sk2.push(x*y);
-                else if(op.equals("/"))
-                    sk2.push(x/y);
-                else if(op.equals("**"))
-                    sk2.push(Math.pow(y,x));
-            }
-            else
-                sk2.push(Double.parseDouble(arr[i]));
-        }
-        return sk2.pop();
-    }
+
+
 }
