@@ -109,11 +109,10 @@ public class HuffmanTree<T>
 
     /**
      * 获取哈夫曼编码
-     * @return 返回哈夫曼码表
+     * @param map 返回哈夫曼编码表
      */
-    public Map<T,String> getCode()
+    public void getCode(Map<T,String> mp)
     {
-        Map<T,String> mp = new TreeMap<>();
         IQueue<HuffmanNode<T>> q = new LinkQueue<>();
         IQueue<String> qStr = new LinkQueue<>();
         q.enter(root);
@@ -139,6 +138,5 @@ public class HuffmanTree<T>
                 //qStr.enter(curStr + temp.name + "->");
             }
         }
-        return mp;
     }
 }

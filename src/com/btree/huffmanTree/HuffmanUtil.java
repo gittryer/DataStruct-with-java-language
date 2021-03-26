@@ -6,18 +6,17 @@ import com.linearStruct.LinkList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 哈夫曼工具类
+ */
 public class HuffmanUtil
 {
-    /**
-     * 哈夫曼编码表
-     */
-    public static Map<Byte,String> huffmanCodeTable;
     /**
      * 二进制串转字节数组
      * @param binary 二进制串
      * @return 返回字节数组
      */
-    private static IList<Byte> binaryToByte(String binary)
+    public static IList<Byte> binaryToByte(String binary)
     {
         //哈夫曼字节数组
         IList<Byte> huffmanByteCode=new LinkList<>();
@@ -36,7 +35,7 @@ public class HuffmanUtil
      * @param bytes 字节数组
      * @return 返回二进制转
      */
-    private static String ByteToBinary(IList<Byte> bytes)
+    public static String byteToBinary(IList<Byte> bytes)
     {
         //存储二进制串
         var sb=new StringBuilder();
@@ -46,36 +45,38 @@ public class HuffmanUtil
         //返回二进制串
         return sb.toString();
     }
-
     /**
      * 哈夫曼编码
      * @param bytes 字节数组
+     * @param map 传出哈夫曼编码表(字节->二进制哈夫曼字符串)
      * @return 返回哈夫曼编码
      */
-    public static String encoding(IList<Byte> bytes)
+    public static String encoding(IList<Byte> bytes,Map<Byte,String> map)
     {
+        if(map==null)
+            throw new NullPointerException("传出参数map不可为空，需要先初始化！");
         //创建哈夫曼树
         var tree=HuffmanUtil.createHuffmanTree(bytes);
         //获取哈夫曼编码表
-        HuffmanUtil.huffmanCodeTable=tree.getCode();
+        tree.getCode(map);
         //存储哈夫曼编码
         var sb=new StringBuilder();
         //放入二进制串
         for(var item :bytes)
-            sb.append(HuffmanUtil.huffmanCodeTable.get(item));
+            sb.append(map.get(item));
         return sb.toString();
     }
-
     /**
      * 哈夫曼解码
-     * @param str 哈夫曼编码门字符串
+     * @param str 哈夫曼编码字符串
+     * @param map 哈夫曼编码表(字节->二进制哈夫曼字符串)
      * @return 返回解码后的字节数组
      */
-    public static IList<Byte> decoding(String str)
+    public static IList<Byte> decoding(String str,Map<Byte,String> map)
     {
         //建立反向编码表
         var codes=new TreeMap<String,Byte>();
-        for (var item :HuffmanUtil.huffmanCodeTable.entrySet())
+        for (var item :map.entrySet())
             codes.put(item.getValue(),item.getKey());
         //开始解码
         IList<Byte> bytes=new LinkList<>();
