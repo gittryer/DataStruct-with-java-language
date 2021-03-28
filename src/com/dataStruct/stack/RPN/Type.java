@@ -12,5 +12,22 @@ enum Type
     //右括号
     RBRACKET,
     //运算符
-    OPERATOR
+    //+
+    ADD,
+    //-
+    SUB,
+    //*
+    MUL,
+    ///
+    DIV,
+    //^
+    POW,
+    //%
+    MOD,
+    //+
+    POSITIVE,
+    //-
+    MINIS,
+    //!
+   FACTORIAL,
 }

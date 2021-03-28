@@ -39,26 +39,9 @@ public class RPNCalaulate
         //清理空格
         exp=exp.replaceAll(" ","");
         //处理和切分
-        expressionSpilt(dealExp(new StringBuilder(exp)));
+        expressionSpilt(exp);
         //计算
         toRpn();
-    }
-
-    /**
-     * 处理负号
-     * @param exp 表达式
-     * @return 处理后的表达式
-     */
-    private String dealExp(StringBuilder exp)
-    {
-        for (int i = 0; i < exp.length() ;i++)
-        {
-            if((exp.charAt(i)=='-'||exp.charAt(i)=='+')&&i==0)
-                exp.insert(0,'0');
-            else if (exp.charAt(i) == '(' && ( exp.charAt(i + 1) == '-'||exp.charAt(i + 1) == '+'))
-                exp.insert(i+1, "0");
-        }
-        return exp.toString();
     }
 //        //清理空格
 //        exp=exp.replaceAll(" ","");
@@ -128,11 +111,9 @@ public class RPNCalaulate
             else
             {
                 while (!this.stack.isEmpty()&&
-                        getOperatorPriproty(this.stack.getTop().toString())
-                                >=getOperatorPriproty(item.toString()))
-                {
+                        this.stack.getTop().getOperatorPriproty()
+                                >=item.getOperatorPriproty())
                     this.rpnExpression.add(this.stack.pop());
-                }
                 this.stack.push(item);
             }
         }
@@ -155,81 +136,70 @@ public class RPNCalaulate
                 sk.push(Double.parseDouble(item.toString()));
             else
             {
-                var x=sk.pop();
-                var y=sk.pop();
-                sk.push(getVal(y,x,item.toString()));
+                if(item.getIsSingleOperator())
+                {
+                    var x=sk.pop();
+                    sk.push(getVal(x,item));
+                }
+                else
+                {
+                    var x=sk.pop();
+                    var y=sk.pop();
+                    sk.push(getVal(y,x,item));
+                }
             }
         }
-//        for(var item :this.rpnExpression)
-//        {
-//            if(item.getTag()== Type.NUM)
-//                sk.push(Double.parseDouble(item.toString()));
-//            else
-//            {
-//                var x=sk.pop();
-//                var y=sk.pop();
-//                sk.push(getVal(y,x,item.toString()));
-//            }
-//        }
         return sk.pop();
     }
 
     /**
-     * 获取运算符优先级
-     * @param str 运算符
-     * @return 返回优先级
-     */
-    private int getOperatorPriproty(String str)
-    {
-        switch (str)
-        {
-            case "+":
-            case "-":
-                return 1;
-            case "*":
-            case "/":
-                return 2;
-            case "^":
-                return 3;
-            default:
-                return -1;
-        }
-    }
-
-    /**
-     * 获取两个数字的运算结果
+     * 二元运算取值
      * @param x 第一个数字
      * @param y  第二个数字
      * @param operator 运算符
      * @return 返回运算结果
      */
-    private double getVal(double x,double y,String operator)
+    private double getVal(double x,double y,Part operator)
     {
-        switch (operator)
+        switch (operator.getTag())
         {
-            case "+":
+            case ADD:
                 return x+y;
-            case "-":
+            case SUB:
                 return x-y;
-            case "*":
+            case MUL:
                 return x*y;
-            case "/":
+            case DIV:
                 return x/y;
-            case "^":
+            case POW:
                 return Math.pow(x,y);
+            case MOD:
+                return x%y;
             default:
                 return 0;
         }
     }
 
-    private double getVal(double x,String operator)
+    /**
+     * 一元运算取值
+     * @param x 运算树
+     * @param operator 运算符
+     * @return 返回值
+     */
+    private double getVal(double x,Part operator)
     {
-        switch (operator)
+        switch (operator.getTag())
         {
-            case "+":
+            case POSITIVE:
                 return x;
-            case "-":
+            case MINIS:
                 return -x;
+            case FACTORIAL:
+                int ans=1;
+                int val=(int)x;
+                for (int i =1; i <=val ; i++)
+                    ans*=i;
+                return ans;
             default:
                 return x;
         }
