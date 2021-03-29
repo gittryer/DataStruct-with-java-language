@@ -11,7 +11,7 @@ public  class StackUtil
      * @param p 进制
      * @return 返回转换后的数值
      */
-    public static String From10(int val,int p)
+    public static String from10(int val, int p)
     {
         if(val==0)
             return "0";
@@ -30,12 +30,34 @@ public  class StackUtil
         }
         return sb.toString();
     }
+
+    /**
+     * p进制转化为10进制
+     * @param val 数字字符串
+     * @param p 进制数
+     * @return 返回10进制数字
+     */
+    public static int to10(String val, int p)
+    {
+        int ans=0;
+        int temp=0;
+        for (int i = val.length()-1; i >=0 ; i--)
+        {
+            char ch=Character.toUpperCase(val.charAt(i));
+            if(ch>='0'&&ch<='9')
+                temp=(int)(ch)-48;
+            else if(ch>='A'&&ch<='Z')
+                temp=(int)(ch)-55;
+            ans+=temp*Math.pow(p,val.length()-i-1);
+        }
+        return ans;
+    }
     /**
      * 括号匹配
      * @param str 字符串
      * @return 返回是否匹配
      */
-    public static boolean BracketsJudge(String str)
+    public static boolean bracketsJudge(String str)
     {
         var sk=new LinkStack<Character>();
         for (int i=0;i<str.length();++i)
@@ -61,6 +83,7 @@ public  class StackUtil
         }
         return sk.getCount()==0;
     }
+
 
 
 

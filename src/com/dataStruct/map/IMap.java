@@ -17,9 +17,8 @@ public interface IMap<K,V>
      * 添加元素
      * @param key 键
      * @param val 值
-     * @return 返回值
      */
-    V add(K key,V val);
+    void add(K key,V val);
 
     /**
      * 根据键获取值
@@ -48,4 +47,16 @@ public interface IMap<K,V>
      * @return 返回是否包含
      */
     boolean contaninsValue(V val);
+
+    /**
+     * 是否为空
+     * @return 返回是否为空
+     */
+    boolean isEmpty();
+
+    /**
+     * 返回键迭代集合
+     * @return 返回键的迭代集
+     */
+    Iterable<K> keys();
 }
