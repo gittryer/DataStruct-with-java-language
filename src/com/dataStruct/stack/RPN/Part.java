@@ -87,6 +87,11 @@ class Part
                         this.tag=Type.FACTORIAL;
                         this.isSingleOperator=true;
                         break;
+                    case "#":
+                        this.tag=Type.END;
+                        Part.LASTVAL=null;
+                        this.isSingleOperator=true;
+                        break;
                      default:
                          break;
                 }

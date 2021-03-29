@@ -34,12 +34,12 @@ public class RPNCalaulate
     {
         //初始化
         this.infixExpression =new LinkList<Part>();
-        this.stack=new LinkStack<>();
+        this.stack=new LinkStack<Part>();
         this.rpnExpression=new LinkList<>();
         //清理空格
         exp=exp.replaceAll(" ","");
         //处理和切分
-        expressionSpilt(exp);
+        expressionSpilt(exp+"#");
         //计算
         toRpn();
     }
@@ -77,7 +77,6 @@ public class RPNCalaulate
         }
         if(sb.length()>0)
             this.infixExpression.add(new Part(sb.toString(),true));
-
         System.out.println(this.infixExpression);
     }
 
@@ -108,6 +107,8 @@ public class RPNCalaulate
                     this.rpnExpression.add(this.stack.pop());
                 this.stack.pop();
             }
+            else if(item.getTag()==Type.END)
+                        break;
             else
             {
                 while (!this.stack.isEmpty()&&

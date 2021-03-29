@@ -3,6 +3,8 @@ package com.dataStruct.map;
 import com.dataStruct.linearStruct.IList;
 import com.dataStruct.linearStruct.LinkList;
 
+import java.util.Arrays;
+
 
 /**
  * 哈希表：线性探查法
@@ -18,7 +20,7 @@ public class HashMap2<K,V> implements IMap<K,V>
     /**
      * 默认数组大小
      */
-    private final int DEFAULT_SIZE=2;
+    private final int DEFAULT_SIZE=1;
     /**
      * 键
      */
@@ -62,8 +64,8 @@ public class HashMap2<K,V> implements IMap<K,V>
                 {
                     int j=hash(keys[i]);
                     while (nkeys[j++]!=null);
-                    nkeys[j]=this.keys[i];
-                    nvals[j]=this.vals[i];
+                    nkeys[j-1]=this.keys[i];
+                    nvals[j-1]=this.vals[i];
                 }
             }
             this.keys=(K[])nkeys;

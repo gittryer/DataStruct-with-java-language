@@ -30,4 +30,6 @@ enum Type
     MINIS,
     //!
    FACTORIAL,
+    //#
+    END ,
 }
