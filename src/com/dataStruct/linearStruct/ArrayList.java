@@ -15,17 +15,16 @@ public class ArrayList<T> implements IList<T>
     //默认长度
     private static final int DEFAULT_SIZE=10;
 
+
     /**
-     * 动态扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count==this.data.length)
-        {
-            var newArr=new Object[this.data.length<<1];
-            System.arraycopy(this.data,0,newArr,0,count);
-            this.data=(T[])newArr;
-        }
+        var newArr=new Object[size];
+        System.arraycopy(this.data,0,newArr,0,count);
+        this.data=(T[])newArr;
     }
 
     /**
@@ -179,9 +178,7 @@ public class ArrayList<T> implements IList<T>
      */
     public void add(T val)
     {
-        expand();
-        var len=this.data.length;
-        this.data[this.count++]=val;
+        add(this.count,val);
     }
 
     /**
@@ -191,7 +188,9 @@ public class ArrayList<T> implements IList<T>
      */
     public void add(int index,T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.count+1==this.data.length)
+            this.resize(this.data.length<<1);
         if(index<0||index>count)
             throw new IndexOutOfBoundsException("越界于Index:"+index+",Count:"+count);
         for (int i=this.count;i>index;--i)
@@ -208,6 +207,8 @@ public class ArrayList<T> implements IList<T>
     {
         if(index<0||index>=count)
             throw new IndexOutOfBoundsException("越界于Index:"+index+",Count:"+count);
+        if(this.count<this.data.length/2)
+            this.resize(this.data.length/2);
         var val=this.data[index];
         for (int i=index;i<count-1;++i)
         {

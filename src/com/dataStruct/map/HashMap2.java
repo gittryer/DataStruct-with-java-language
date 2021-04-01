@@ -3,8 +3,6 @@ package com.dataStruct.map;
 import com.dataStruct.linearStruct.IList;
 import com.dataStruct.linearStruct.LinkList;
 
-import java.util.Arrays;
-
 
 /**
  * 哈希表：线性探查法
@@ -48,29 +46,28 @@ public class HashMap2<K,V> implements IMap<K,V>
     {
         return this.getCount()/this.keys.length;
     }
+
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 元素个数
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count+1==this.keys.length)
+        var nkeys=new Object[this.keys.length<<2];
+        var nvals=new Object[this.keys.length<<2];
+        for (int i = 0; i < this.keys.length; i++)
         {
-            var nkeys=new Object[this.keys.length<<2];
-            var nvals=new Object[this.keys.length<<2];
-            for (int i = 0; i < this.keys.length; i++)
+            //复制原先的key和value
+            if(this.keys[i]!=null)
             {
-                //复制原先的key和value
-                if(this.keys[i]!=null)
-                {
-                    int j=hash(keys[i]);
-                    while (nkeys[j++]!=null);
-                    nkeys[j-1]=this.keys[i];
-                    nvals[j-1]=this.vals[i];
-                }
+                int j=hash(keys[i]);
+                while (nkeys[j++]!=null);
+                nkeys[j-1]=this.keys[i];
+                nvals[j-1]=this.vals[i];
             }
-            this.keys=(K[])nkeys;
-            this.vals=(V[])nvals;
         }
+        this.keys=(K[])nkeys;
+        this.vals=(V[])nvals;
     }
 
     /**
@@ -104,7 +101,8 @@ public class HashMap2<K,V> implements IMap<K,V>
     public void add(K key, V val)
     {
         int i;
-        expand();
+        if(this.count+1==this.keys.length)
+            this.resize(this.keys.length<<1);
         for (i = hash(key); this.keys[i]!=null ; i=(i+1)%this.keys.length)
         {
             if(this.keys[i].equals(key))
@@ -123,8 +121,8 @@ public class HashMap2<K,V> implements IMap<K,V>
     {
         int i;
         for (i = hash(key); this.keys[i]!=null ; i=(i+1)%this.keys.length)
-        {
-            if(this.keys[i].equals(key))
+            {
+                if(this.keys[i].equals(key))
                 return this.vals[i];
         }
         return null;
@@ -182,7 +180,6 @@ public class HashMap2<K,V> implements IMap<K,V>
     @Override
     public String toString()
     {
-        IList<K> ls=new LinkList<>();
         var sb=new StringBuilder();
         boolean flg=true;
         sb.append("{");

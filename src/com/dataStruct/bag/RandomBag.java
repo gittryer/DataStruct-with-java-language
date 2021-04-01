@@ -29,16 +29,26 @@ public class RandomBag<T> implements IBag<T>,Iterable<T>
         this.count=0;
     }
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count<this.data.length)
-            return;
-        var arr=(T[])new Object[this.data.length<<1];
-        System.arraycopy(this.data,0,arr,0,this.count);
-        this.data=arr;
+        var newArr=new Object[size];
+        System.arraycopy(this.data,0,newArr,0,count);
+        this.data=(T[])newArr;
     }
+//    /**
+//     * 扩容
+//     */
+//    private void expand()
+//    {
+//        if(this.count<this.data.length)
+//            return;
+//        var arr=(T[])new Object[this.data.length<<1];
+//        System.arraycopy(this.data,0,arr,0,this.count);
+//        this.data=arr;
+//    }
 
     @Override
     public int getCount()
@@ -49,7 +59,9 @@ public class RandomBag<T> implements IBag<T>,Iterable<T>
     @Override
     public void add(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.count+1==this.data.length)
+            this.resize(this.data.length<<1);
         this.data[this.count++]=val;
     }
 

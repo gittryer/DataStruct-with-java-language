@@ -15,6 +15,7 @@ public class LinkQueue<T> implements IQueue<T>
      * 入队
      * @param val 入队元素
      */
+    @Override
     public void enter(T val)
     {
         if(isEmpty())
@@ -36,6 +37,7 @@ public class LinkQueue<T> implements IQueue<T>
      * 出队
      * @return 返回出队元素
      */
+    @Override
     public T out()
     {
         if(isEmpty())
@@ -61,6 +63,7 @@ public class LinkQueue<T> implements IQueue<T>
      * 判断队列是否为空
      * @return 队列为空吗
      */
+    @Override
     public boolean isEmpty()
     {
         return this.count==0;
@@ -69,6 +72,7 @@ public class LinkQueue<T> implements IQueue<T>
      * 元素个数
      * @return 返回队列元素个数
      */
+    @Override
     public int getCount()
     {
         return this.count;
@@ -77,6 +81,7 @@ public class LinkQueue<T> implements IQueue<T>
      * 获取队列头部元素
      * @return 返回队列头部元素
      */
+    @Override
     public T getFront()
     {
         if(isEmpty())

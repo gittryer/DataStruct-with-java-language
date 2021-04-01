@@ -33,17 +33,15 @@ public class RandomQueue<T> implements IQueue<T>
         this.data=(T[])new Object[size];
         this.count=0;
     }
-
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count<this.data.length)
-            return;
-        var arr=(T[])new Object[this.data.length<<1];
-        System.arraycopy(this.data,0,arr,0,this.data.length);
-        this.data=arr;
+        var newArr=new Object[size];
+        System.arraycopy(this.data,0,newArr,0,count);
+        this.data=(T[])newArr;
     }
 
     @Override
@@ -64,7 +62,9 @@ public class RandomQueue<T> implements IQueue<T>
     @Override
     public void enter(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.count==this.data.length)
+            this.resize(this.count<<1);
         this.data[this.count++]=val;
     }
 
@@ -73,6 +73,9 @@ public class RandomQueue<T> implements IQueue<T>
     {
         if(isEmpty())
             throw new IndexOutOfBoundsException("队空！");
+        //缩容
+        if(this.count<this.data.length/2)
+            this.resize(this.data.length/2);
         var id=this.getRandomIndex();
         var val=this.data[id];
         swap(id,this.count-1);

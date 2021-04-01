@@ -10,7 +10,7 @@ import java.lang.reflect.Array;
  * @param <K> 键
  * @param <V> 值
  */
-public class HashMap<K,V> implements IMap<K,V>
+public class HashMap1<K,V> implements IMap<K,V>
 {
     /**
      * 已经使用的元素个数
@@ -28,7 +28,7 @@ public class HashMap<K,V> implements IMap<K,V>
     /**
      * 构造函数
      */
-    public HashMap()
+    public HashMap1()
     {
         this.data= (Node<K, V>[]) Array.newInstance(Node.class,DEFAULT_SIZE);
         for (int i = 0; i < this.data.length; i++)

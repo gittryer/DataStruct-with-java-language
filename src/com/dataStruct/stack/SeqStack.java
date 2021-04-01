@@ -9,23 +9,22 @@ import java.util.Iterator;
 public class SeqStack<T> implements IStack<T>,Iterable<T>
 {
     //默认元素个数
-    private final int DEFAULT_SIZE=12;
+    private final int DEFAULT_SIZE=1;
     //数据域
     private T []data;
     //元素个数
     private int count;
-
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count<this.data.length)
-            return;
-        var newArr=(T[])new Object[this.data.length<<1];
+        var newArr=new Object[size];
         System.arraycopy(this.data,0,newArr,0,count);
-        this.data=newArr;
+        this.data=(T[])newArr;
     }
+
     /**
      * 构造函数
      */
@@ -45,7 +44,9 @@ public class SeqStack<T> implements IStack<T>,Iterable<T>
     @Override
     public void push(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.count+1==this.data.length)
+            this.resize(this.data.length<<1);
         this.data[this.count++]=val;
     }
 
@@ -54,6 +55,8 @@ public class SeqStack<T> implements IStack<T>,Iterable<T>
     {
         if(isEmpty())
             throw new IndexOutOfBoundsException("栈为空！");
+        if(this.count<this.data.length/2)
+            this.resize(this.data.length/2);
         return this.data[--this.count];
     }
 
@@ -67,6 +70,7 @@ public class SeqStack<T> implements IStack<T>,Iterable<T>
      * 返回是否为空
      * @return 返回元素是否为0
      */
+    @Override
     public boolean isEmpty()
     {
         return this.count==0;

@@ -76,16 +76,14 @@ public class BHeap<T> implements IHeap<T>
                 ((Comparable<T>)x).compareTo(y):comparator.compare(x,y);
     }
     /**
-     * 动态扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.count==this.data.length)
-        {
-            var newArr=new Object[this.data.length<<1];
-            System.arraycopy(this.data,0,newArr,0,count);
-            this.data=(T[])newArr;
-        }
+        var newArr=new Object[size];
+        System.arraycopy(this.data,0,newArr,0,count);
+        this.data=(T[])newArr;
     }
 
     /**
@@ -213,7 +211,9 @@ public class BHeap<T> implements IHeap<T>
     @Override
     public void add(T val)
     {
-        this.expand();
+        //如果有必要，扩容
+        if(this.count+1==this.data.length)
+            this.resize(this.data.length<<1);
         this.data[this.count++]=val;
         siftUp(this.count-1);
     }

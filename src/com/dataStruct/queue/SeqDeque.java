@@ -53,7 +53,9 @@ public class SeqDeque<T> implements IDeque<T>
     @Override
     public void pushLeft(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.getCount()+1==this.data.length)
+            this.resize(this.data.length<<1);
         this.front=(this.front-1+this.data.length)%this.data.length;
         this.data[this.front]=val;
     }
@@ -61,7 +63,9 @@ public class SeqDeque<T> implements IDeque<T>
     @Override
     public void pushRight(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.getCount()+1==this.data.length)
+            this.resize(this.data.length<<1);
         this.data[this.rear]=val;
         this.rear=(this.rear+1)%this.data.length;
     }
@@ -71,6 +75,8 @@ public class SeqDeque<T> implements IDeque<T>
     {
         if(isEmpty())
             throw new IndexOutOfBoundsException("队列空！");
+        if(this.getCount()<this.data.length/2)
+            this.resize(this.data.length/2);
         var val=this.data[this.front];
         this.front=(this.front+1)%this.data.length;
         return val;
@@ -85,22 +91,32 @@ public class SeqDeque<T> implements IDeque<T>
         var val=this.data[this.rear];
         return val;
     }
-
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(this.getCount()+1==this.data.length)
-        {
-            T[]data=(T[])new Object[this.data.length<<1];
-            for (int i = 0; i < this.getCount(); i++)
-            {
-                data[i]=this.data[(i+this.front)%this.data.length];
-            }
-            this.front=0;
-            this.rear=this.data.length-1;
-            this.data=data;
-        }
+        T[]data=(T[])new Object[size];
+        this.front=0;
+        this.rear=this.data.length-1;
+        this.data=data;
     }
+//    /**
+//     * 扩容
+//     */
+//    private void expand()
+//    {
+//        if(this.getCount()+1==this.data.length)
+//        {
+//            T[]data=(T[])new Object[this.data.length<<1];
+//            for (int i = 0; i < this.getCount(); i++)
+//            {
+//                data[i]=this.data[(i+this.front)%this.data.length];
+//            }
+//            this.front=0;
+//            this.rear=this.data.length-1;
+//            this.data=data;
+//        }
+//    }
 }

@@ -64,28 +64,43 @@ public class SeqQueue<T> implements IQueue<T>
     @Override
     public void enter(T val)
     {
-        expand();
+        //如果有必要，扩容
+        if(this.isFull())
+            this.resize(this.data.length<<1);
         this.data[this.rear]=val;
         this.rear=(this.rear+1)%this.data.length;
     }
-
     /**
-     * 扩容
+     * 重新设置数组大小
+     * @param size 数组大小
      */
-    private void expand()
+    private void resize(int size)
     {
-        if(isFull())
-        {
-            T[]data=(T[])new Object[this.data.length<<1];
-            for (int i = 0; i < this.data.length; i++)
-            {
-                data[i]=this.data[(this.front+i)%this.data.length];
-            }
-            this.front=0;
-            this.rear=this.data.length-1;
-            this.data=data;
-        }
+        T[]data=(T[])new Object[size];
+        for (int i = 0; i < this.data.length; i++)
+            data[i]=this.data[(this.front+i)%this.data.length];
+        this.front=0;
+        this.rear=this.data.length-1;
+        this.data=data;
     }
+
+//    /**
+//     * 扩容
+//     */
+//    private void expand()
+//    {
+//        if(isFull())
+//        {
+//            T[]data=(T[])new Object[this.data.length<<1];
+//            for (int i = 0; i < this.data.length; i++)
+//            {
+//                data[i]=this.data[(this.front+i)%this.data.length];
+//            }
+//            this.front=0;
+//            this.rear=this.data.length-1;
+//            this.data=data;
+//        }
+//    }
 
     @Override
     public T out()
